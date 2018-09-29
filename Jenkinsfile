@@ -4,9 +4,11 @@ stage('docker-test'){
 
 def server = Artifactory.server 'artifactory-server-id'
 
-def rtDocker = Artifactory.docker username: 'admin', password: 'admin'
+def rtDocker = Artifactory.docker server: server
 
-def buildInfo = rtDocker.push('http://10.136.60.7/artifactory/docker-remote/library/hello-world:latest', 'docker-remote/library/')
+def getimage = rtDocker.pull('hello-world')
+
+def buildInfo = rtDocker.push('docker-remote/hello-world:latest', '/library')
 
 server.publishBuildInfo buildInfo
 
