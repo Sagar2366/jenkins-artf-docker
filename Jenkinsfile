@@ -1,10 +1,11 @@
 node() {
 
 stage('docker-test'){
-docker login docker.artifactory -u admin -p admin
-docker pull docker.artifactory/nginx:latest
-docker pull hello-world
-docker tag hello-world docker.artifactory/hello-world:3.0
-docker push docker.artifactory/hello-world:3.0
-}
-}
+
+def server = Artifactory.server 'artifactory-server-id'
+
+def rtDocker = Artifactory.docker username: 'admin', password: 'admin'
+
+def buildInfo = rtDocker.push('http://10.136.60.7/artifactory/docker-remote/library/hello-world:latest', 'docker-remote/library/')
+
+server.publishBuildInfo buildInfo
