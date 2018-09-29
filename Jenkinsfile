@@ -8,7 +8,11 @@ def rtDocker = Artifactory.docker server: server
 
 def getimage = rtDocker.pull('hello-world')
 
-def buildInfo = rtDocker.push('docker-remote/hello-world:latest', '/library')
+def login = rtDocker.login docker.artifactory -u admin -p admin
+
+def buildIamge = rtDocker.tag('hello-world','docker-remote/hello-world:4.0')
+
+def buildInfo = rtDocker.push('docker-remote/hello-world:4.0', '/library')
 
 server.publishBuildInfo buildInfo
 
